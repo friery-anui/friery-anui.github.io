@@ -61,12 +61,22 @@
         editButton.style.display = 'inline-block';
         loginButton.textContent = 'Đăng xuất';
         loginButton.style.visibility = 'visible';
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          if (!item.classList.contains('admin-added')) {
+            item.querySelector('.delete-btn')?.style.display = 'none';  
+          } else {
+            item.querySelector('.delete-btn')?.style.display = 'inline-block'; 
+          }
+        });
       } else {
         ownerControls.style.display = 'none';
         editButton.style.display = 'none';
         editSection.style.display = 'none';
         loginButton.textContent = 'Đăng nhập quản trị';
         loginButton.style.visibility = 'hidden';
+        document.querySelectorAll('.gallery-item .delete-btn').forEach(btn => {
+          btn.style.display = 'none';  
+        });
       }
     }
 
@@ -123,8 +133,7 @@
       imageCount++;
       const container = document.createElement('div');
       container.className = 'gallery-item';
-      if (isOwner) container.classList.add('owner');
-
+      if (isOwner) container.classList.add('admin-added');
       container.innerHTML = `
         <img src="${src}" alt="${title}">
         <h4>Ảnh ${imageCount}</h4>
@@ -138,11 +147,6 @@
           saveGalleryToStorage();
         });
       }
-
-      container.querySelector('img').addEventListener('click', () => {
-        document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('active'));
-        container.classList.add('active');
-      });
 
       galleryEl.appendChild(container);
     }
@@ -161,8 +165,10 @@
 
     function saveGalleryToStorage() {
       const images = [];
-      document.querySelectorAll('.gallery-item img').forEach(img => {
-        images.push(img.src);
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        const img = item.querySelector('img');
+        const isAdmin = item.classList.contains('admin-added');
+        images.push({ src: img.src, isAdmin });
       });
       localStorage.setItem('galleryImages', JSON.stringify(images));
     }
@@ -170,8 +176,8 @@
     function loadGalleryFromStorage() {
       const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
       imageCount = 0;
-      images.forEach(src => {
-        addImageToGallery(src);
+      images.forEach(({ src, isAdmin }) => {
+        addImageToGallery(src, "", "", isAdmin);
       });
     }
 
