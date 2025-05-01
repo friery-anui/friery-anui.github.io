@@ -45,6 +45,7 @@
 
   <script>
     let isOwner = localStorage.getItem('isOwner') === 'true';
+    let imageCount = 0;
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
     const ownerControls = document.getElementById('ownerControls');
@@ -54,18 +55,18 @@
     const editSection = document.getElementById('editSection');
     const newAvatarInput = document.getElementById('newAvatar');
 
-    let imageCount = 0;
-
     function updateOwnerUI() {
       if (isOwner) {
         ownerControls.style.display = 'block';
         editButton.style.display = 'inline-block';
         loginButton.textContent = 'Đăng xuất';
+        loginButton.style.visibility = 'visible';
       } else {
         ownerControls.style.display = 'none';
         editButton.style.display = 'none';
         editSection.style.display = 'none';
         loginButton.textContent = 'Đăng nhập quản trị';
+        loginButton.style.visibility = 'hidden';
       }
     }
 
@@ -112,11 +113,9 @@
       avatar.src = savedAvatar;
     }
 
-    updateOwnerUI();
-
     avatar.addEventListener('click', () => {
       if (!isOwner) {
-        loginButton.style.display = 'inline-block';
+        loginButton.style.visibility = 'visible';
       }
     });
 
@@ -137,25 +136,15 @@
         container.querySelector('.delete-btn').addEventListener('click', () => {
           container.remove();
           saveGalleryToStorage();
-          updateImageTitles();
         });
       }
 
       container.querySelector('img').addEventListener('click', () => {
-        document.querySelectorAll('.gallery-item').forEach(item => {
-          item.classList.remove('active');
-        });
+        document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('active'));
         container.classList.add('active');
       });
 
       galleryEl.appendChild(container);
-    }
-
-    function updateImageTitles() {
-      const allImages = document.querySelectorAll('.gallery-item');
-      allImages.forEach((item, index) => {
-        item.querySelector('h4').textContent = `Ảnh ${index + 1}`;
-      });
     }
 
     imageInput?.addEventListener('change', (event) => {
@@ -180,11 +169,13 @@
 
     function loadGalleryFromStorage() {
       const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
+      imageCount = 0;
       images.forEach(src => {
         addImageToGallery(src);
       });
     }
 
+    updateOwnerUI();
     loadGalleryFromStorage();
   </script>
 </body>
