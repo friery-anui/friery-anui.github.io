@@ -54,6 +54,8 @@
     const editSection = document.getElementById('editSection');
     const newAvatarInput = document.getElementById('newAvatar');
 
+    let imageCount = 0;
+
     function updateOwnerUI() {
       if (isOwner) {
         ownerControls.style.display = 'block';
@@ -112,14 +114,11 @@
 
     updateOwnerUI();
 
-    // Hiển thị nút đăng nhập khi nhấn vào avatar
     avatar.addEventListener('click', () => {
       if (!isOwner) {
-        loginButton.style.display = 'inline-block'; // Hiển thị nút đăng nhập khi avatar được nhấn
+        loginButton.style.display = 'inline-block';
       }
     });
-
-    let imageCount = 0;
 
     function addImageToGallery(src, title = "", desc = "") {
       imageCount++;
@@ -138,6 +137,7 @@
         container.querySelector('.delete-btn').addEventListener('click', () => {
           container.remove();
           saveGalleryToStorage();
+          updateImageTitles();
         });
       }
 
@@ -149,6 +149,13 @@
       });
 
       galleryEl.appendChild(container);
+    }
+
+    function updateImageTitles() {
+      const allImages = document.querySelectorAll('.gallery-item');
+      allImages.forEach((item, index) => {
+        item.querySelector('h4').textContent = `Ảnh ${index + 1}`;
+      });
     }
 
     imageInput?.addEventListener('change', (event) => {
