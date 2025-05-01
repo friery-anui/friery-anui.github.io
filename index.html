@@ -35,5 +35,31 @@
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
   </div>
+  <script>
+    const images = [
+      {
+        title: "Ảnh 1",
+        src: "images/uploads/anh1.jpg",
+        desc: "Mô tả ảnh 1"
+      },
+      {
+        title: "Ảnh 2",
+        src: "images/uploads/anh2.jpg",
+        desc: "Mô tả ảnh 2"
+      }
+    ];
+
+    const galleryEl = document.getElementById('gallery');
+    images.forEach(img => {
+      const el = document.createElement('div');
+      el.className = 'gallery-item';
+      el.innerHTML = `
+        <img src="${img.src}" alt="${img.title}">
+        <h4>${img.title}</h4>
+        <p>${img.desc}</p>
+      `;
+      galleryEl.appendChild(el);
+    });
+  </script>
 </body>
 </html>
