@@ -114,18 +114,22 @@
 
     let imageCount = 0;
 
-    function addImageToGallery(src, title = "", desc = "") {
+    function addImageToGallery(src, title = "", desc = "", skipSave = false) {
       imageCount++;
       const container = document.createElement('div');
       container.className = 'gallery-item';
       if (isOwner) container.classList.add('owner');
 
       container.innerHTML = `
-        <img src="${src}" alt="${title}">
+        <img src="${src}" alt="${title}" class="gallery-image">
         <h4>Ảnh ${imageCount}</h4>
         <p>${desc || "Tải từ máy người dùng"}</p>
         ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
       `;
+
+      container.querySelector('img').addEventListener('click', () => {
+        container.querySelector('img').classList.toggle('active');
+      });
 
       if (isOwner) {
         container.querySelector('.delete-btn').addEventListener('click', () => {
@@ -134,14 +138,13 @@
         });
       }
 
-      container.querySelector('img').addEventListener('click', () => {
-        document.querySelectorAll('.gallery-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        container.classList.add('active');
-      });
-
       galleryEl.appendChild(container);
+
+      if (!skipSave) {
+        const existing = JSON.parse(localStorage.getItem('galleryImages') || "[]");
+        existing.push({ src, title, desc });
+        localStorage.setItem('galleryImages', JSON.stringify(existing));
+      }
     }
 
     imageInput?.addEventListener('change', (event) => {
@@ -149,8 +152,7 @@
       Array.from(files).forEach((file) => {
         const reader = new FileReader();
         reader.onload = function(e) {
-          addImageToGallery(e.target.result);
-          saveGalleryToStorage();
+          addImageToGallery(e.target.result, "", "Tải từ máy người dùng");
         };
         reader.readAsDataURL(file);
       });
@@ -159,15 +161,16 @@
     function saveGalleryToStorage() {
       const images = [];
       document.querySelectorAll('.gallery-item img').forEach(img => {
-        images.push(img.src);
+        images.push({ src: img.src, title: img.alt, desc: img.nextElementSibling.textContent });
       });
       localStorage.setItem('galleryImages', JSON.stringify(images));
     }
 
     function loadGalleryFromStorage() {
       const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
-      images.forEach(src => {
-        addImageToGallery(src);
+      imageCount = 0;
+      images.forEach(img => {
+        addImageToGallery(img.src, img.title, img.desc, true);
       });
     }
 
