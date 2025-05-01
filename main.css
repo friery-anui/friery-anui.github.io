@@ -1,84 +1,59 @@
 body {
   font-family: 'Quicksand', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f7fa;
-}
-
-.container {
+  background-color: #f9f9f9;
+  color: #222;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  margin: 0;
 }
 
-.profile {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
+.container {
   text-align: center;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 90%;
 }
 
-.avatar {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
+.profile img.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
   margin-bottom: 20px;
-  cursor: pointer;
-}
-
-#gallery {
-  margin: 10px 0;
-}
-
-.gallery-img {
-  width: 60px;
-  height: 60px;
   object-fit: cover;
-  margin: 5px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: border 0.3s;
+  border: 4px solid #e0e0e0;
 }
 
-.gallery-img:hover {
-  border: 2px solid #007bff;
+.profile h1 {
+  margin: 0;
+  font-size: 28px;
 }
 
-.gallery-img.selected {
-  border: 2px solid #28a745;
+.profile p {
+  font-size: 16px;
+  margin-top: 8px;
 }
 
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px;
-  margin-top: 10px;
-  width: 100%;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.social-links {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-button:hover {
-  background-color: #0056b3;
+.social-links a {
+  text-decoration: none;
+  color: #0077cc;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
 }
 
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: none;
-}
-
-textarea {
-  height: 80px;
-  resize: none;
+.social-links a:hover {
+  border-bottom: 2px solid #0077cc;
 }
