@@ -41,6 +41,7 @@ body {
 }
 
 #loginButton {
+  display: none;
   visibility: hidden;
   background-color: #0077cc;
   color: white;
@@ -58,7 +59,7 @@ body {
 }
 
 #loginButton.visible {
-  visibility: visible;
+  display: inline-block;
 }
 
 #editButton {
