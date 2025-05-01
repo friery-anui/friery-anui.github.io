@@ -5,59 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hồ sơ cá nhân - friery-anui</title>
   <link rel="stylesheet" href="main.css" />
-  <style>
-    body {
-      font-family: 'Quicksand', sans-serif;
-    }
-    .gallery-item {
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .delete-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: red;
-      color: white;
-      border: none;
-      padding: 4px 8px;
-      cursor: pointer;
-      display: none;
-    }
-    .owner .delete-btn {
-      display: block;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <div class="profile">
-      <img class="avatar" src="https://preview.redd.it/clothing-klukai-v0-lm7x6x5084xd1.png" alt="Avatar" width="200">
+      <img id="avatar" class="avatar" src="clothing-klukai-v0-lm7x6x5084xd1.webp" alt="Avatar">
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
+
+      <div id="avatarUpload" style="display: none;">
+        <label>Thay ảnh đại diện:</label><br>
+        <input type="file" id="avatarInput" accept="image/*">
+      </div>
     </div>
 
     <div class="social-links">
-      <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a>
-      <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a>
-      <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
+      <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a> |
+      <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a> |
+      <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a> |
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
 
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
-
-      <!-- Chỉ hiện khi là quản lý -->
       <div id="ownerControls" style="display: none;">
         <input type="file" id="imageInput" multiple accept="image/*" />
       </div>
-
       <div id="gallery" class="gallery-grid"></div>
     </div>
   </div>
 
   <script>
-    // Bảo mật bằng mật khẩu (nhập khi tải trang)
     let isOwner = false;
     const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
 
@@ -68,10 +46,13 @@
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
     const ownerControls = document.getElementById('ownerControls');
+    const avatar = document.getElementById('avatar');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarUpload = document.getElementById('avatarUpload');
 
-    // Nếu là người quản lý → hiển thị nút tải ảnh
     if (isOwner) {
       ownerControls.style.display = 'block';
+      avatarUpload.style.display = 'block';
     }
 
     let imageCount = 0;
@@ -83,23 +64,29 @@
       if (isOwner) container.classList.add('owner');
 
       container.innerHTML = `
-        <img src="${src}" alt="${title}" width="300">
+        <img src="${src}" alt="${title}">
         <h4>Ảnh ${imageCount}</h4>
         <p>${desc || "Tải từ máy người dùng"}</p>
         ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
       `;
 
       if (isOwner) {
-        const deleteBtn = container.querySelector('.delete-btn');
-        deleteBtn.addEventListener('click', () => {
+        container.querySelector('.delete-btn').addEventListener('click', () => {
           galleryEl.removeChild(container);
         });
       }
 
+      container.querySelector('img').addEventListener('click', () => {
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        container.classList.add('active');
+      });
+
       galleryEl.appendChild(container);
     }
 
-    imageInput.addEventListener('change', (event) => {
+    imageInput?.addEventListener('change', (event) => {
       const files = event.target.files;
       Array.from(files).forEach((file) => {
         const reader = new FileReader();
@@ -108,6 +95,17 @@
         };
         reader.readAsDataURL(file);
       });
+    });
+
+    avatarInput?.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatar.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     });
   </script>
 </body>
