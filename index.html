@@ -45,144 +45,144 @@
 
   <script>
     let isOwner = localStorage.getItem('isOwner') === 'true';
-    let imageCount = 0;
-    const galleryEl = document.getElementById('gallery');
-    const imageInput = document.getElementById('imageInput');
-    const ownerControls = document.getElementById('ownerControls');
-    const avatar = document.getElementById('avatar');
-    const loginButton = document.getElementById('loginButton');
-    const editButton = document.getElementById('editButton');
-    const editSection = document.getElementById('editSection');
-    const newAvatarInput = document.getElementById('newAvatar');
+let imageCount = 0;
+const galleryEl = document.getElementById('gallery');
+const imageInput = document.getElementById('imageInput');
+const ownerControls = document.getElementById('ownerControls');
+const avatar = document.getElementById('avatar');
+const loginButton = document.getElementById('loginButton');
+const editButton = document.getElementById('editButton');
+const editSection = document.getElementById('editSection');
+const newAvatarInput = document.getElementById('newAvatar');
 
-    function updateOwnerUI() {
-      if (isOwner) {
-        ownerControls.style.display = 'block';
-        editButton.style.display = 'inline-block';
-        loginButton.textContent = 'Đăng xuất';
-        loginButton.style.visibility = 'visible';
-        document.querySelectorAll('.gallery-item').forEach(item => {
-          if (!item.classList.contains('admin-added')) {
-            item.querySelector('.delete-btn')?.style.display = 'none';  
-          } else {
-            item.querySelector('.delete-btn')?.style.display = 'inline-block'; 
-          }
-        });
+function updateOwnerUI() {
+  if (isOwner) {
+    ownerControls.style.display = 'block';
+    editButton.style.display = 'inline-block';
+    loginButton.textContent = 'Đăng xuất';
+    loginButton.style.visibility = 'visible';
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      if (!item.classList.contains('admin-added')) {
+        item.querySelector('.delete-btn')?.style.display = 'none';  
       } else {
-        ownerControls.style.display = 'none';
-        editButton.style.display = 'none';
-        editSection.style.display = 'none';
-        loginButton.textContent = 'Đăng nhập quản trị';
-        loginButton.style.visibility = 'hidden';
-        document.querySelectorAll('.gallery-item .delete-btn').forEach(btn => {
-          btn.style.display = 'none';  
-        });
-      }
-    }
-
-    loginButton.addEventListener('click', () => {
-      if (isOwner) {
-        isOwner = false;
-        localStorage.setItem('isOwner', 'false');
-        updateOwnerUI();
-      } else {
-        const password = prompt('Nhập mật khẩu quản trị:');
-        if (password === 'anui2025') {
-          isOwner = true;
-          localStorage.setItem('isOwner', 'true');
-          updateOwnerUI();
-        } else {
-          alert('Sai mật khẩu!');
-        }
+        item.querySelector('.delete-btn')?.style.display = 'inline-block'; 
       }
     });
-
-    editButton.addEventListener('click', () => {
-      editSection.style.display = editSection.style.display === 'block' ? 'none' : 'block';
+  } else {
+    ownerControls.style.display = 'none';
+    editButton.style.display = 'none';
+    editSection.style.display = 'none';
+    loginButton.textContent = 'Đăng nhập quản trị';
+    loginButton.style.visibility = 'hidden';
+    document.querySelectorAll('.gallery-item .delete-btn').forEach(btn => {
+      btn.style.display = 'none';  
     });
+  }
+}
 
-    function changeAvatar() {
-      const file = newAvatarInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          avatar.src = e.target.result;
-          localStorage.setItem('avatarSrc', e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function removeAvatar() {
-      avatar.src = 'content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp';
-      localStorage.removeItem('avatarSrc');
-    }
-
-    const savedAvatar = localStorage.getItem('avatarSrc');
-    if (savedAvatar) {
-      avatar.src = savedAvatar;
-    }
-
-    avatar.addEventListener('click', () => {
-      if (!isOwner) {
-        loginButton.style.visibility = 'visible';  // Hiển thị nút đăng nhập khi click vào avatar
-      }
-    });
-
-    function addImageToGallery(src, title = "", desc = "") {
-      imageCount++;
-      const container = document.createElement('div');
-      container.className = 'gallery-item';
-      if (isOwner) container.classList.add('admin-added');
-      container.innerHTML = `
-        <img src="${src}" alt="${title}">
-        <h4>Ảnh ${imageCount}</h4>
-        <p>${desc || "Tải từ máy người dùng"}</p>
-        ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
-      `;
-
-      if (isOwner) {
-        container.querySelector('.delete-btn').addEventListener('click', () => {
-          container.remove();
-          saveGalleryToStorage();
-        });
-      }
-
-      galleryEl.appendChild(container);
-    }
-
-    imageInput?.addEventListener('change', (event) => {
-      const files = event.target.files;
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          addImageToGallery(e.target.result);
-          saveGalleryToStorage();
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    function saveGalleryToStorage() {
-      const images = [];
-      document.querySelectorAll('.gallery-item').forEach(item => {
-        const img = item.querySelector('img');
-        const isAdmin = item.classList.contains('admin-added');
-        images.push({ src: img.src, isAdmin });
-      });
-      localStorage.setItem('galleryImages', JSON.stringify(images));
-    }
-
-    function loadGalleryFromStorage() {
-      const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
-      imageCount = 0;
-      images.forEach(({ src, isAdmin }) => {
-        addImageToGallery(src, "", "", isAdmin);
-      });
-    }
-
+loginButton.addEventListener('click', () => {
+  if (isOwner) {
+    isOwner = false;
+    localStorage.setItem('isOwner', 'false');
     updateOwnerUI();
-    loadGalleryFromStorage();
+  } else {
+    const password = prompt('Nhập mật khẩu quản trị:');
+    if (password === 'anui2025') {
+      isOwner = true;
+      localStorage.setItem('isOwner', 'true');
+      updateOwnerUI();
+    } else {
+      alert('Sai mật khẩu!');
+    }
+  }
+});
+
+editButton.addEventListener('click', () => {
+  editSection.style.display = editSection.style.display === 'block' ? 'none' : 'block';
+});
+
+function changeAvatar() {
+  const file = newAvatarInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      avatar.src = e.target.result;
+      localStorage.setItem('avatarSrc', e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function removeAvatar() {
+  avatar.src = 'content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp';
+  localStorage.removeItem('avatarSrc');
+}
+
+const savedAvatar = localStorage.getItem('avatarSrc');
+if (savedAvatar) {
+  avatar.src = savedAvatar;
+}
+
+avatar.addEventListener('click', () => {
+  if (!isOwner) {
+    loginButton.style.visibility = 'visible';  // Hiển thị nút đăng nhập khi click vào avatar
+  }
+});
+
+function addImageToGallery(src, title = "", desc = "") {
+  imageCount++;
+  const container = document.createElement('div');
+  container.className = 'gallery-item';
+  if (isOwner) container.classList.add('admin-added');
+  container.innerHTML = `
+    <img src="${src}" alt="${title}">
+    <h4>Ảnh ${imageCount}</h4>
+    <p>${desc || "Tải từ máy người dùng"}</p>
+    ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
+  `;
+
+  if (isOwner) {
+    container.querySelector('.delete-btn').addEventListener('click', () => {
+      container.remove();
+      saveGalleryToStorage();
+    });
+  }
+
+  galleryEl.appendChild(container);
+}
+
+imageInput?.addEventListener('change', (event) => {
+  const files = event.target.files;
+  Array.from(files).forEach((file) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      addImageToGallery(e.target.result);
+      saveGalleryToStorage();
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+function saveGalleryToStorage() {
+  const images = [];
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const img = item.querySelector('img');
+    const isAdmin = item.classList.contains('admin-added');
+    images.push({ src: img.src, isAdmin });
+  });
+  localStorage.setItem('galleryImages', JSON.stringify(images));
+}
+
+function loadGalleryFromStorage() {
+  const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
+  imageCount = 0;
+  images.forEach(({ src, isAdmin }) => {
+    addImageToGallery(src, "", "", isAdmin);
+  });
+}
+
+updateOwnerUI();
+loadGalleryFromStorage();
   </script>
 </body>
 </html>
