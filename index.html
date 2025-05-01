@@ -112,6 +112,13 @@
 
     updateOwnerUI();
 
+    // Hiển thị nút đăng nhập khi nhấn vào avatar
+    avatar.addEventListener('click', () => {
+      if (!isOwner) {
+        loginButton.style.display = 'inline-block'; // Hiển thị nút đăng nhập khi avatar được nhấn
+      }
+    });
+
     let imageCount = 0;
 
     function addImageToGallery(src, title = "", desc = "") {
