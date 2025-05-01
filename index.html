@@ -17,13 +17,13 @@
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
     </div>
     
-    <!-- Edit button to toggle edit mode (only visible for admin) -->
+    <!-- Nút chỉnh sửa -->
     <button id="editButton" class="no-access">Chỉnh sửa</button>
 
-    <!-- Editable section (hidden initially) -->
-    <div class="edit-section" id="editSection">
-      <label for="newAvatar">Chọn ảnh đại diện mới:</label>
-      <input type="file" id="newAvatar" accept="image/*">
+    <!-- Phần chỉnh sửa avatar -->
+    <div class="edit-section" id="editSection" style="display: none;">
+      <label for="avatarInput">Chọn ảnh đại diện mới:</label>
+      <input type="file" id="avatarInput" accept="image/*">
       <button onclick="changeAvatar()">Lưu ảnh</button>
       <button onclick="removeAvatar()">Xóa ảnh</button>
     </div>
@@ -34,6 +34,7 @@
       <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
+
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
       <div id="ownerControls" style="display: none;">
@@ -42,6 +43,7 @@
       <div id="gallery" class="gallery-grid"></div>
     </div>
   </div>
+
   <script>
     let isOwner = false;
     const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
@@ -55,11 +57,31 @@
     const ownerControls = document.getElementById('ownerControls');
     const avatar = document.getElementById('avatar');
     const avatarInput = document.getElementById('avatarInput');
-    const avatarUpload = document.getElementById('avatarUpload');
+    const editButton = document.getElementById('editButton');
+    const editSection = document.getElementById('editSection');
 
     if (isOwner) {
       ownerControls.style.display = 'block';
-      avatarUpload.style.display = 'block';
+      editButton.classList.remove('no-access');
+
+      editButton.addEventListener('click', () => {
+        editSection.style.display = editSection.style.display === 'none' ? 'block' : 'none';
+      });
+    }
+
+    function changeAvatar() {
+      const file = avatarInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatar.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeAvatar() {
+      avatar.src = 'content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp';
     }
 
     let imageCount = 0;
@@ -103,18 +125,6 @@
         reader.readAsDataURL(file);
       });
     });
-
-    avatarInput?.addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          avatar.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
   </script>
 </body>
 </html>
-
