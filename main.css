@@ -62,7 +62,6 @@ body {
   display: none; /* Đảm bảo nút bị ẩn khi chưa đăng nhập */
 }
 
-/* Nút đăng nhập */
 #loginButton {
   display: none;
   background-color: #0077cc;
@@ -74,10 +73,6 @@ body {
   border-radius: 5px;
   transition: background-color 0.3s ease;
   margin-top: 10px;
-}
-
-#loginButton:hover {
-  background-color: #005fa3;
 }
 
 #loginButton.visible {
@@ -131,7 +126,11 @@ body {
   color: #005fa3;
 }
 
-/* Phần thêm ảnh */
+/* Phần thêm ảnh chỉ hiển thị khi đăng nhập */
+.add-image-section {
+  display: none; /* Ẩn phần thêm ảnh khi chưa đăng nhập */
+}
+
 .add-image-section input[type="text"] {
   margin-top: 10px;
   padding: 8px;
