@@ -1,3 +1,4 @@
+/* Mặc định chung */
 body {
   font-family: 'Quicksand', sans-serif;
   background-color: #f9f9f9;
@@ -15,10 +16,11 @@ body {
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  max-width: 400px;
+  max-width: 600px;
   width: 90%;
 }
 
+/* Hồ sơ cá nhân */
 .profile img.avatar {
   width: 150px;
   height: 150px;
@@ -27,11 +29,6 @@ body {
   object-fit: cover;
   border: 4px solid #e0e0e0;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.3s ease;
-}
-
-.profile img.avatar.active {
-  border-color: #0077cc;
 }
 
 .profile h1 {
@@ -44,7 +41,8 @@ body {
   margin-top: 8px;
 }
 
-#loginButton {
+/* Chỉnh sửa */
+#editButton, #loginButton {
   background-color: #0077cc;
   color: white;
   border: none;
@@ -52,36 +50,26 @@ body {
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
   margin-top: 10px;
-  opacity: 0;
-  pointer-events: none;
 }
 
-#loginButton.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-#loginButton:hover {
+#editButton:hover, #loginButton:hover {
   background-color: #005fa3;
 }
 
-#editButton {
-  background-color: #ff8c00;
-  color: white;
-  font-weight: bold;
-  padding: 10px 20px;
-  border: none;
-  margin-top: 10px;
-  border-radius: 5px;
-  cursor: pointer;
+/* Liên kết mạng xã hội */
+.social-links a {
+  margin: 5px 10px;
+  color: #0077cc;
+  text-decoration: none;
+  font-size: 18px;
 }
 
-#editButton:hover {
-  background-color: #cc6a00;
+.social-links a:hover {
+  color: #005fa3;
 }
 
+/* Bộ sưu tập ảnh */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -94,24 +82,10 @@ body {
   height: 200px;
   object-fit: cover;
   border-radius: 8px;
-  transition: transform 0.3s ease;
 }
 
-.gallery-item img:hover {
-  transform: scale(1.05);
-}
-
-.gallery-item h4 {
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-.gallery-item p {
-  font-size: 14px;
-  color: #666;
-}
-
-.gallery-item button {
+.delete-btn {
+  display: none;
   background-color: #ff4444;
   color: white;
   border: none;
@@ -119,16 +93,14 @@ body {
   font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
-.gallery-item button.show {
-  opacity: 1;
-}
-
-.gallery-item button:hover {
+.delete-btn:hover {
   background-color: #e03535;
+}
+
+.gallery-item.admin-added .delete-btn {
+  display: inline-block;
 }
 
 .edit-section {
@@ -152,31 +124,8 @@ body {
   font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
-  margin-right: 10px;
 }
 
 .edit-section button:hover {
   background-color: #218838;
-}
-
-.social-links {
-  margin-top: 20px;
-}
-
-.social-links a {
-  display: inline-block;
-  margin: 5px 10px;
-  color: #0077cc;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.social-links a:hover {
-  color: #005fa3;
-}
-
-@media (max-width: 600px) {
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
