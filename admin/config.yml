@@ -1,6 +1,6 @@
 backend:
   name: git-gateway
-  branch: main  # Hoặc "master", tùy vào nhánh bạn sử dụng
+  branch: main
 
 media_folder: "static/uploads"  # Đảm bảo thư mục này tồn tại
 public_folder: "/uploads"
