@@ -80,7 +80,11 @@
         loginButton.textContent = 'Đăng nhập quản trị';
         loginButton.classList.remove('visible');
       }
-    }
+
+  // ⚠️ Cập nhật lại giao diện gallery theo quyền admin
+  galleryEl.innerHTML = '';         // Xóa toàn bộ ảnh cũ
+  loadGalleryFromStorage();         // Tải lại ảnh theo quyền mới
+}
 
     // Đăng nhập / đăng xuất
     loginButton.addEventListener('click', () => {
