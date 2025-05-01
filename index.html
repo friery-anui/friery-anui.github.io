@@ -125,7 +125,7 @@ if (savedAvatar) {
 
 avatar.addEventListener('click', () => {
   if (!isOwner) {
-    loginButton.classList.add('visible');  // Hiển thị nút đăng nhập khi click vào avatar
+    loginButton.style.display = 'inline-block';  // Hiển thị nút đăng nhập khi click vào avatar
   }
 });
 
