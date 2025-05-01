@@ -2,44 +2,26 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hồ sơ cá nhân - friery-anui</title>
   <link rel="stylesheet" href="main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <div class="profile">
-      <!-- Avatar sử dụng link từ Pixiv -->
-      <img src="https://i.pinimg.com/564x/b8/2d/62/b82d62a46f50a5aa38537e5f98f13ad4.jpg" alt="Ảnh đại diện" class="avatar" id="avatar">
+      <img class="avatar" src="https://preview.redd.it/clothing-klukai-v0-lm7x6x5084xd1.png?width=500&format=png&auto=webp&s=a28a77b3a2b4ac4b0fdb4b950462df5a9c081a67" alt="Avatar">
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
-
-      <div id="avatarUpload" style="display: none;">
-        <label>Thay ảnh đại diện:</label><br>
-        <input type="file" id="avatarInput" accept="image/*">
-      </div>
     </div>
-
     <div class="social-links">
-      <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a> |
-      <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a> |
-      <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a> |
+      <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a>
+      <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a>
+      <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
-
-    <div class="gallery-section">
-      <h2>Bộ sưu tập ảnh</h2>
-      <div id="ownerControls" style="display: none;">
-        <input type="file" id="imageInput" multiple accept="image/*" />
-      </div>
-      <div id="gallery" class="gallery-grid"></div>
-    </div>
-
-    <!-- Nút sửa -->
-    <button id="editButton">Chỉnh sửa</button>
   </div>
-
-  <!-- Thêm script vào cuối body -->
-  <script src="main.js"></script>
 </body>
 </html>
