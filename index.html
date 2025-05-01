@@ -123,10 +123,11 @@ if (savedAvatar) {
   avatar.src = savedAvatar;
 }
 
+ // Hiển thị nút đăng nhập khi nhấn vào avatar
 avatar.addEventListener('click', () => {
   if (!isOwner) {
-    loginButton.style.display = 'inline-block';  // Hiển thị nút đăng nhập khi click vào avatar
-  }
+    loginButton.style.display = 'inline-block'; // Hiển thị nút đăng nhập khi avatar được nhấn
+    }
 });
 
 function addImageToGallery(src, title = "", desc = "") {
