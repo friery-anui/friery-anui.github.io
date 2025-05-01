@@ -2,16 +2,16 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "static/uploads"  # Đảm bảo thư mục này tồn tại
-public_folder: "/uploads"
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
 
 collections:
-    - name: "gallery"
+  - name: "gallery"
     label: "Bộ sưu tập ảnh"
     folder: "content/gallery"
     create: true
-    slug: "{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Tiêu đề", name: "title", widget: "string" }
       - { label: "Ảnh", name: "image", widget: "image" }
-      - { label: "Mô tả", name: "description", widget: "text" }
+      - { label: "Mô tả", name: "body", widget: "markdown" }
