@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hồ sơ cá nhân - friery-anui</title>
   <link rel="stylesheet" href="main.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+    }
     .gallery-item {
       position: relative;
       margin-bottom: 16px;
@@ -32,7 +32,7 @@
 <body>
   <div class="container">
     <div class="profile">
-      <img class="avatar" src="https://preview.redd.it/clothing-klukai-v0-lm7x6x5084xd1.png?width=500&format=png&auto=webp&s=a28a77b3a2b4ac4b0fdb4b950462df5a9c081a67" alt="Avatar">
+      <img class="avatar" src="https://preview.redd.it/clothing-klukai-v0-lm7x6x5084xd1.png" alt="Avatar" width="200">
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
     </div>
@@ -47,8 +47,8 @@
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
 
-      <!-- Input chọn ảnh (chỉ chủ mới thấy) -->
-      <div id="ownerControls">
+      <!-- Chỉ hiện khi là quản lý -->
+      <div id="ownerControls" style="display: none;">
         <input type="file" id="imageInput" multiple accept="image/*" />
       </div>
 
@@ -57,16 +57,21 @@
   </div>
 
   <script>
-    // Xác định xem có phải chủ sở hữu không
-    const isOwner = true; // Đặt thành false nếu là người xem
+    // Bảo mật bằng mật khẩu (nhập khi tải trang)
+    let isOwner = false;
+    const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
+
+    if (password === "anui2025") {
+      isOwner = true;
+    }
 
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
     const ownerControls = document.getElementById('ownerControls');
 
-    // Ẩn input nếu không phải chủ
-    if (!isOwner) {
-      ownerControls.style.display = 'none';
+    // Nếu là người quản lý → hiển thị nút tải ảnh
+    if (isOwner) {
+      ownerControls.style.display = 'block';
     }
 
     let imageCount = 0;
@@ -75,18 +80,15 @@
       imageCount++;
       const container = document.createElement('div');
       container.className = 'gallery-item';
-      if (isOwner) {
-        container.classList.add('owner');
-      }
+      if (isOwner) container.classList.add('owner');
 
       container.innerHTML = `
-        <img src="${src}" alt="${title}">
+        <img src="${src}" alt="${title}" width="300">
         <h4>Ảnh ${imageCount}</h4>
         <p>${desc || "Tải từ máy người dùng"}</p>
         ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
       `;
 
-      // Nút xoá
       if (isOwner) {
         const deleteBtn = container.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', () => {
