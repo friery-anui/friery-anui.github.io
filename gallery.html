@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bộ sưu tập ảnh</title>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+  <h1>Bộ sưu tập ảnh</h1>
+  <div id="gallery" class="gallery"></div>
+
+  <script>
+    fetch("https://friery-profile.netlify.app/content/gallery/")
+      .then(response => response.text())
+      .then(data => {
+        const galleryDiv = document.getElementById("gallery");
+        const parser = new DOMParser();
+        const html = parser.parseFromString(data, "text/html");
+        const files = html.querySelectorAll("a");
+        files.forEach(file => {
+          if (file.href.endsWith(".md")) {
+            fetch(file.href)
+              .then(res => res.text())
+              .then(text => {
+                const title = (text.match(/title: "(.*)"/) || [])[1];
+                const image = (text.match(/image: "(.*)"/) || [])[1];
+                const desc = (text.match(/description: "(.*)"/) || [])[1];
+
+                const imgHTML = `
+                  <div class="gallery-item">
+                    <h2>${title || ""}</h2>
+                    <img src="${image}" alt="${title}" />
+                    <p>${desc || ""}</p>
+                  </div>
+                `;
+                galleryDiv.innerHTML += imgHTML;
+              });
+          }
+        });
+      });
+  </script>
+</body>
+</html>
