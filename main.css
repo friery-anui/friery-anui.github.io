@@ -15,7 +15,7 @@ body {
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  max-width: 800px;
+  max-width: 400px;
   width: 90%;
 }
 
@@ -26,6 +26,8 @@ body {
   margin-bottom: 20px;
   object-fit: cover;
   border: 4px solid #e0e0e0;
+  cursor: pointer; /* Thêm con trỏ chuột khi di chuột qua avatar */
+  transition: transform 0.2s ease;
 }
 
 .profile h1 {
@@ -58,6 +60,24 @@ body {
   border-bottom: 2px solid #0077cc;
 }
 
+/* Nút đăng nhập quản trị sẽ ẩn đi khi bắt đầu */
+#loginButton {
+  display: none;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+#loginButton:hover {
+  background-color: #005fa3;
+}
+
 /* Edit Section Styling */
 .edit-section {
   margin-top: 20px;
@@ -86,6 +106,7 @@ button:hover {
   background-color: #005fa3;
 }
 
+/* Nút đăng nhập khi nhấn avatar */
 #editButton {
   background-color: #ff8c00;
   color: white;
@@ -96,58 +117,17 @@ button:hover {
   background-color: #cc6a00;
 }
 
-.no-access {
-  display: none;
+/* Hiệu ứng khi nhấn vào avatar */
+.avatar:hover {
+  transform: scale(1.05); /* Tăng kích thước nhẹ khi hover vào avatar */
 }
 
-/* Gallery Grid */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-  margin-top: 30px;
+.avatar.active {
+  border: 4px solid #0077cc; /* Thêm viền khi avatar được chọn */
 }
 
+/* Đảm bảo rằng các ảnh trong gallery không bị to ngay từ đầu */
 .gallery-item img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-}
-
-/* Phóng to ảnh khi click */
-.gallery-item img.active {
-  transform: scale(1.5);
-  z-index: 10;
-}
-
-.gallery-item {
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.gallery-item h4 {
-  font-size: 16px;
-  margin-top: 10px;
-}
-
-.gallery-item p {
-  font-size: 14px;
-  color: #777;
-}
-
-.gallery-item .delete-btn {
-  background-color: #f44336;
-  color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.gallery-item .delete-btn:hover {
-  background-color: #e53935;
-}
+  max-width: 200px;
+  transition: transform 0.3
