@@ -35,56 +35,5 @@
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
   </div>
-
-  <script>
-    // Assuming that you have a way to determine if the user is an admin
-    let isAdmin = true; // Set to true or false based on user role
-
-    // Show the edit button only for admin users
-    if (isAdmin) {
-      document.getElementById('editButton').classList.remove('no-access');
-    }
-
-    // Toggle the visibility of the edit section
-    document.getElementById('editButton').addEventListener('click', function() {
-      const editSection = document.getElementById('editSection');
-      if (editSection.style.display === 'none') {
-        editSection.style.display = 'block';
-        this.innerText = 'Hủy chỉnh sửa';
-      } else {
-        editSection.style.display = 'none';
-        this.innerText = 'Chỉnh sửa';
-      }
-    });
-
-    // Change the avatar image (only for admin)
-    function changeAvatar() {
-      if (!isAdmin) {
-        alert('Bạn không có quyền thay đổi ảnh.');
-        return;
-      }
-      const fileInput = document.getElementById('newAvatar');
-      const avatar = document.getElementById('avatar');
-
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          avatar.src = e.target.result; // Update the avatar image source
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // Remove the avatar image (only for admin)
-    function removeAvatar() {
-      if (!isAdmin) {
-        alert('Bạn không có quyền xóa ảnh.');
-        return;
-      }
-      const avatar = document.getElementById('avatar');
-      avatar.src = ''; // Remove the avatar image source
-    }
-  </script>
 </body>
 </html>
