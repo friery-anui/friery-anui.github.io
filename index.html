@@ -3,86 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hồ sơ cá nhân - friery-anui</title>
+  <title>Hồ sơ cá nhân - Friery Anui</title>
   <link rel="stylesheet" href="main.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <!-- Hồ sơ cá nhân -->
+    <!-- Thông tin cá nhân -->
     <div class="profile">
-      <!-- Nhấn vào avatar sẽ hiển thị nút đăng nhập -->
       <img class="avatar" id="avatar" src="content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp" alt="Avatar" />
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
     </div>
 
-    <!-- Nút đăng nhập hoặc đăng xuất (ẩn mặc định) -->
+    <!-- Nút đăng nhập -->
     <button id="loginButton">Đăng nhập quản trị</button>
 
-    <!-- Nút chỉnh sửa chỉ hiện khi là quản trị viên -->
-    <button id="editButton" class="no-access">Chỉnh sửa</button>
-
-    <!-- Khu vực chỉnh sửa avatar -->
-    <div class="edit-section" id="editSection">
-      <label for="newAvatar">Chọn ảnh đại diện mới:</label>
-      <input type="file" id="newAvatar" accept="image/*">
-      <button onclick="changeAvatar()">Lưu ảnh</button>
-      <button onclick="removeAvatar()">Xóa ảnh</button>
+    <!-- Bộ sưu tập ảnh -->
+    <div class="gallery-section">
+      <h2>Bộ sưu tập ảnh</h2>
+      <!-- Thêm trường mô tả khi tải ảnh -->
+      <div class="add-image-section">
+        <input type="file" id="imageInput" multiple accept="image/*" />
+        <input type="text" id="imageDesc" placeholder="Mô tả ảnh" />
+      </div>
+      <div id="gallery" class="gallery-grid"></div>
     </div>
 
-    <!-- Liên kết mạng xã hội -->
+    <!-- Liên kết xã hội -->
     <div class="social-links">
       <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a>
       <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a>
       <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
-
-    <!-- Bộ sưu tập ảnh -->
-    <div class="gallery-section">
-      <h2>Bộ sưu tập ảnh</h2>
-      <!-- Chỉ hiện khi là admin -->
-      <div id="ownerControls" style="display: none;">
-        <input type="file" id="imageInput" multiple accept="image/*" />
-      </div>
-      <div id="gallery" class="gallery-grid"></div>
-    </div>
   </div>
 
   <script>
-    // === QUẢN LÝ TRẠNG THÁI ADMIN ===
-    let isOwner = localStorage.getItem('isOwner') === 'true'; // Lưu trạng thái qua localStorage
-    let imageCount = 0;
-
+    let isOwner = localStorage.getItem('isOwner') === 'true';
     const galleryEl = document.getElementById('gallery');
-    const imageInput = document.getElementById('imageInput');
-    const ownerControls = document.getElementById('ownerControls');
     const avatar = document.getElementById('avatar');
     const loginButton = document.getElementById('loginButton');
-    const editButton = document.getElementById('editButton');
-    const editSection = document.getElementById('editSection');
-    const newAvatarInput = document.getElementById('newAvatar');
+    const imageInput = document.getElementById('imageInput');
+    const imageDesc = document.getElementById('imageDesc');
 
-    // Cập nhật giao diện theo quyền quản trị
     function updateOwnerUI() {
       if (isOwner) {
-        ownerControls.style.display = 'block';
-        editButton.style.display = 'inline-block';
         loginButton.textContent = 'Đăng xuất';
         loginButton.classList.add('visible');
       } else {
-        ownerControls.style.display = 'none';
-        editButton.style.display = 'none';
-        editSection.style.display = 'none';
         loginButton.textContent = 'Đăng nhập quản trị';
         loginButton.classList.remove('visible');
       }
     }
 
-    // Đăng nhập / đăng xuất
     loginButton.addEventListener('click', () => {
       if (isOwner) {
         isOwner = false;
@@ -100,7 +74,7 @@
       }
     });
 
-    // Nhấn vào avatar để hiển thị nút đăng nhập
+    // Hiển thị/ẩn loginButton khi click avatar nếu chưa là owner
     avatar.addEventListener('click', () => {
       if (!isOwner) {
         loginButton.classList.toggle('visible');
@@ -108,91 +82,32 @@
       }
     });
 
-    // Mở / đóng khu vực chỉnh sửa
-    editButton.addEventListener('click', () => {
-      editSection.style.display = editSection.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // Đổi ảnh đại diện
-    function changeAvatar() {
-      const file = newAvatarInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          avatar.src = e.target.result;
-          localStorage.setItem('avatarSrc', e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // Xóa ảnh đại diện
-    function removeAvatar() {
-      avatar.src = 'content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp';
-      localStorage.removeItem('avatarSrc');
-    }
-
-    // Load ảnh đại diện nếu đã lưu trước đó
-    const savedAvatar = localStorage.getItem('avatarSrc');
-    if (savedAvatar) avatar.src = savedAvatar;
-
-    // Thêm ảnh mới vào gallery
-    function addImageToGallery(src, title = "", desc = "") {
-      imageCount++;
+    // Hàm thêm ảnh vào bộ sưu tập
+    function addImageToGallery(src, desc) {
       const container = document.createElement('div');
       container.className = 'gallery-item';
-      if (isOwner) container.classList.add('admin-added');
       container.innerHTML = `
-        <img src="${src}" alt="${title}">
-        <h4>Ảnh ${imageCount}</h4>
-        <p>${desc || "Tải từ máy người dùng"}</p>
-        ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
+        <img src="${src}" alt="${desc}">
+        <h4>Ảnh</h4>
+        <p>${desc || "Mô tả không có"}</p>
       `;
-
-      // Gắn chức năng xoá nếu là admin
-      if (isOwner) {
-        const btn = container.querySelector('.delete-btn');
-        btn.addEventListener('click', () => {
-          container.remove();
-          saveGalleryToStorage();
-        });
-        btn.classList.add('show');
-      }
-
       galleryEl.appendChild(container);
     }
 
-    // Khi chọn ảnh tải lên
-    imageInput?.addEventListener('change', (event) => {
+    // Xử lý khi người dùng thêm ảnh vào bộ sưu tập
+    imageInput.addEventListener('change', (event) => {
       Array.from(event.target.files).forEach(file => {
         const reader = new FileReader();
         reader.onload = e => {
-          addImageToGallery(e.target.result);
-          saveGalleryToStorage();
+          const description = imageDesc.value || "Không có mô tả";
+          addImageToGallery(e.target.result, description);
+          imageDesc.value = ""; // Reset mô tả sau khi thêm ảnh
         };
         reader.readAsDataURL(file);
       });
     });
 
-    // Lưu danh sách ảnh gallery vào localStorage
-    function saveGalleryToStorage() {
-      const images = [];
-      document.querySelectorAll('.gallery-item').forEach(item => {
-        const img = item.querySelector('img');
-        images.push({ src: img.src, isAdmin: item.classList.contains('admin-added') });
-      });
-      localStorage.setItem('galleryImages', JSON.stringify(images));
-    }
-
-    // Load ảnh từ localStorage khi tải lại
-    function loadGalleryFromStorage() {
-      const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
-      imageCount = 0;
-      images.forEach(({ src, isAdmin }) => addImageToGallery(src, '', '', isAdmin));
-    }
-
-    updateOwnerUI(); // Áp dụng trạng thái admin khi tải trang
-    loadGalleryFromStorage(); // Tải ảnh gallery từ bộ nhớ
+    updateOwnerUI();
   </script>
 </body>
 </html>
