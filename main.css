@@ -159,6 +159,15 @@ body {
   background-color: #218838;
 }
 
+.delete-btn {
+  display: none;
+}
+
+.gallery-item.admin-added .delete-btn {
+  display: inline-block;
+}
+
+
 .social-links {
   margin-top: 20px;
 }
