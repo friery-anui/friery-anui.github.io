@@ -116,7 +116,9 @@
 
     // Hiển thị avatar đã lưu nếu có
     const savedAvatar = localStorage.getItem('avatarSrc');
-    if (savedAvatar) avatar.src = savedAvatar;
+    if (savedAvatar) {
+      avatar.src = savedAvatar;  // Hiển thị lại avatar đã lưu
+    }
 
     // Hàm thêm ảnh vào bộ sưu tập
     function addImageToGallery(src, desc) {
@@ -142,6 +144,37 @@
         reader.readAsDataURL(file);
       });
     });
+
+    // Hiển thị lại các ảnh đã lưu vào bộ sưu tập
+    function loadGalleryFromLocalStorage() {
+      const savedImages = JSON.parse(localStorage.getItem('gallery')) || [];
+      savedImages.forEach(img => {
+        addImageToGallery(img.src, img.desc);
+      });
+    }
+
+    // Lưu ảnh vào bộ sưu tập
+    function saveToGallery(src, desc) {
+      const savedImages = JSON.parse(localStorage.getItem('gallery')) || [];
+      savedImages.push({ src, desc });
+      localStorage.setItem('gallery', JSON.stringify(savedImages));
+    }
+
+    // Xử lý khi người dùng thêm ảnh vào bộ sưu tập
+    imageInput.addEventListener('change', (event) => {
+      Array.from(event.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const description = imageDesc.value || "Không có mô tả";
+          addImageToGallery(e.target.result, description);
+          saveToGallery(e.target.result, description); // Lưu vào localStorage
+          imageDesc.value = ""; // Reset mô tả sau khi thêm ảnh
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    loadGalleryFromLocalStorage();  // Tải ảnh từ localStorage khi trang được load
 
     updateOwnerUI();
   </script>
