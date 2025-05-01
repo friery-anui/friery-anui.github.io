@@ -32,6 +32,10 @@ body {
   transition: transform 0.2s ease;
 }
 
+.profile img.avatar.active {
+  transform: scale(1.1); /* Thêm hiệu ứng zoom khi avatar được kích hoạt */
+}
+
 .profile h1 {
   margin: 0;
   font-size: 28px;
@@ -134,33 +138,29 @@ body {
 .add-image-section input[type="text"] {
   margin-top: 10px;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   width: 100%;
-  font-size: 16px;
 }
 
-/* Thêm ảnh chỉ khi đăng nhập */
 .add-image-section input[type="file"] {
   margin-top: 10px;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   width: 100%;
 }
 
-/* Tạo hiệu ứng cho nút đăng nhập */
-#loginButton {
-  display: none;
-  background-color: #0077cc;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+.add-image-section button {
   margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-#loginButton.visible {
-  display: inline-block;
+.add-image-section button:hover {
+  background-color: #45a049;
 }
