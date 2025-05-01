@@ -1,12 +1,14 @@
 backend:
   name: git-gateway
   branch: main  # Hoặc "master", tùy vào nhánh bạn sử dụng
-media_folder: "static/uploads"
+
+media_folder: "static/uploads"  # Đảm bảo thư mục này tồn tại
 public_folder: "/uploads"
+
 collections:
   - name: "posts"
     label: "Posts"
-    folder: "_posts"
+    folder: "_posts"  # Đảm bảo thư mục này tồn tại
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
