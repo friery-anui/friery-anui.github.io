@@ -26,6 +26,9 @@
 
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
+
+      <!-- Input chọn ảnh -->
+      <input type="file" id="imageInput" multiple accept="image/*" />
       <div id="gallery" class="gallery-grid">
         <!-- Hình ảnh sẽ được chèn tự động tại đây bằng JavaScript -->
       </div>
@@ -33,28 +36,50 @@
   </div>
 
   <script>
+    // Ảnh mặc định có sẵn
     const images = [
-  {
-    title: "Ảnh 1",
-    src: "images/2025-05-01_16.29.23.png",
-    desc: "Mô tả ảnh 1"
-  },
-  {
-    title: "Ảnh 2",
-    src: "images/2025-05-01_16.28.54.png",
-    desc: "Mô tả ảnh 2"
-  }
-];
+      {
+        title: "Ảnh 1",
+        src: "images/2025-05-01_16.29.23.png",
+        desc: "Mô tả ảnh 1"
+      },
+      {
+        title: "Ảnh 2",
+        src: "images/2025-05-01_16.28.54.png",
+        desc: "Mô tả ảnh 2"
+      }
+    ];
+
     const galleryEl = document.getElementById('gallery');
-    images.forEach(img => {
+    const imageInput = document.getElementById('imageInput');
+
+    // Hàm thêm ảnh vào gallery
+    function addImageToGallery(src, title = "Ảnh từ máy", desc = "Được chọn từ máy tính") {
       const el = document.createElement('div');
       el.className = 'gallery-item';
       el.innerHTML = `
-        <img src="${img.src}" alt="${img.title}">
-        <h4>${img.title}</h4>
-        <p>${img.desc}</p>
+        <img src="${src}" alt="${title}">
+        <h4>${title}</h4>
+        <p>${desc}</p>
       `;
       galleryEl.appendChild(el);
+    }
+
+    // Hiển thị ảnh có sẵn
+    images.forEach(img => {
+      addImageToGallery(img.src, img.title, img.desc);
+    });
+
+    // Sự kiện khi người dùng chọn ảnh từ máy tính
+    imageInput.addEventListener('change', (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          addImageToGallery(e.target.result, `Ảnh ${images.length + index + 1}`, "Tải từ máy người dùng");
+        };
+        reader.readAsDataURL(file);
+      });
     });
   </script>
 </body>
