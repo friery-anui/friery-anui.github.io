@@ -8,6 +8,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .gallery-item {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      display: none;
+    }
+    .owner .delete-btn {
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -27,56 +47,62 @@
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
 
-      <!-- Input chọn ảnh -->
-      <input type="file" id="imageInput" multiple accept="image/*" />
-      <div id="gallery" class="gallery-grid">
-        <!-- Hình ảnh sẽ được chèn tự động tại đây bằng JavaScript -->
+      <!-- Input chọn ảnh (chỉ chủ mới thấy) -->
+      <div id="ownerControls">
+        <input type="file" id="imageInput" multiple accept="image/*" />
       </div>
+
+      <div id="gallery" class="gallery-grid"></div>
     </div>
   </div>
 
   <script>
-    // Ảnh mặc định có sẵn
-    const images = [
-      {
-        title: "Ảnh 1",
-        src: "images/2025-05-01_16.29.23.png",
-        desc: "Mô tả ảnh 1"
-      },
-      {
-        title: "Ảnh 2",
-        src: "images/2025-05-01_16.28.54.png",
-        desc: "Mô tả ảnh 2"
-      }
-    ];
+    // Xác định xem có phải chủ sở hữu không
+    const isOwner = true; // Đặt thành false nếu là người xem
 
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
+    const ownerControls = document.getElementById('ownerControls');
 
-    // Hàm thêm ảnh vào gallery
-    function addImageToGallery(src, title = "Ảnh từ máy", desc = "Được chọn từ máy tính") {
-      const el = document.createElement('div');
-      el.className = 'gallery-item';
-      el.innerHTML = `
-        <img src="${src}" alt="${title}">
-        <h4>${title}</h4>
-        <p>${desc}</p>
-      `;
-      galleryEl.appendChild(el);
+    // Ẩn input nếu không phải chủ
+    if (!isOwner) {
+      ownerControls.style.display = 'none';
     }
 
-    // Hiển thị ảnh có sẵn
-    images.forEach(img => {
-      addImageToGallery(img.src, img.title, img.desc);
-    });
+    let imageCount = 0;
 
-    // Sự kiện khi người dùng chọn ảnh từ máy tính
+    function addImageToGallery(src, title = "", desc = "") {
+      imageCount++;
+      const container = document.createElement('div');
+      container.className = 'gallery-item';
+      if (isOwner) {
+        container.classList.add('owner');
+      }
+
+      container.innerHTML = `
+        <img src="${src}" alt="${title}">
+        <h4>Ảnh ${imageCount}</h4>
+        <p>${desc || "Tải từ máy người dùng"}</p>
+        ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
+      `;
+
+      // Nút xoá
+      if (isOwner) {
+        const deleteBtn = container.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', () => {
+          galleryEl.removeChild(container);
+        });
+      }
+
+      galleryEl.appendChild(container);
+    }
+
     imageInput.addEventListener('change', (event) => {
       const files = event.target.files;
-      Array.from(files).forEach((file, index) => {
+      Array.from(files).forEach((file) => {
         const reader = new FileReader();
         reader.onload = function(e) {
-          addImageToGallery(e.target.result, `Ảnh ${images.length + index + 1}`, "Tải từ máy người dùng");
+          addImageToGallery(e.target.result);
         };
         reader.readAsDataURL(file);
       });
