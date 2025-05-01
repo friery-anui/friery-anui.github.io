@@ -29,6 +29,7 @@ body {
   object-fit: cover;
   border: 4px solid #e0e0e0;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .profile h1 {
@@ -41,8 +42,9 @@ body {
   margin-top: 8px;
 }
 
-/* Chỉnh sửa */
-#editButton, #loginButton {
+/* Nút đăng nhập */
+#loginButton {
+  display: none;
   background-color: #0077cc;
   color: white;
   border: none;
@@ -50,23 +52,16 @@ body {
   font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
+  transition: background-color 0.3s ease;
   margin-top: 10px;
 }
 
-#editButton:hover, #loginButton:hover {
+#loginButton:hover {
   background-color: #005fa3;
 }
 
-/* Liên kết mạng xã hội */
-.social-links a {
-  margin: 5px 10px;
-  color: #0077cc;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.social-links a:hover {
-  color: #005fa3;
+#loginButton.visible {
+  display: inline-block;
 }
 
 /* Bộ sưu tập ảnh */
@@ -82,50 +77,19 @@ body {
   height: 200px;
   object-fit: cover;
   border-radius: 8px;
+  transition: transform 0.3s ease;
 }
 
-.delete-btn {
-  display: none;
-  background-color: #ff4444;
-  color: white;
-  border: none;
-  padding: 5px 10px;
+.gallery-item img:hover {
+  transform: scale(1.05);
+}
+
+.gallery-item h4 {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.gallery-item p {
   font-size: 14px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.delete-btn:hover {
-  background-color: #e03535;
-}
-
-.gallery-item.admin-added .delete-btn {
-  display: inline-block;
-}
-
-.edit-section {
-  display: none;
-  margin-top: 20px;
-}
-
-.edit-section input {
-  margin-bottom: 10px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 80%;
-}
-
-.edit-section button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.edit-section button:hover {
-  background-color: #218838;
+  color: #666;
 }
