@@ -35,25 +35,32 @@
     </div>
   </div>
 
+  <button class="edit-icon" id="editButton">Sửa</button>
+
   <script>
     let isOwner = false;
-    const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
-
-    if (password === "anui2025") {
-      isOwner = true;
-    }
-
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
     const ownerControls = document.getElementById('ownerControls');
     const avatar = document.getElementById('avatar');
     const avatarInput = document.getElementById('avatarInput');
     const avatarUpload = document.getElementById('avatarUpload');
+    const editButton = document.getElementById('editButton');
 
-    if (isOwner) {
-      ownerControls.style.display = 'block';
-      avatarUpload.style.display = 'block';
-    }
+    // Xử lý khi nhấn nút "Sửa"
+    editButton.addEventListener('click', () => {
+      const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
+
+      if (password === "anui2025") {
+        isOwner = true;
+        ownerControls.style.display = 'block';
+        avatarUpload.style.display = 'block';
+        editButton.textContent = "Đang chỉnh sửa...";
+        editButton.disabled = true;  // Vô hiệu hóa nút sau khi đã nhập mật khẩu
+      } else {
+        alert("Mật khẩu sai!");
+      }
+    });
 
     let imageCount = 0;
 
