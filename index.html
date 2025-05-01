@@ -34,32 +34,87 @@
       <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
+    <div class="gallery-section">
+      <h2>Bộ sưu tập ảnh</h2>
+      <div id="ownerControls" style="display: none;">
+        <input type="file" id="imageInput" multiple accept="image/*" />
+      </div>
+      <div id="gallery" class="gallery-grid"></div>
+    </div>
   </div>
   <script>
-    const images = [
-      {
-        title: "Ảnh 1",
-        src: "images/uploads/anh1.jpg",
-        desc: "Mô tả ảnh 1"
-      },
-      {
-        title: "Ảnh 2",
-        src: "images/uploads/anh2.jpg",
-        desc: "Mô tả ảnh 2"
-      }
-    ];
+    let isOwner = false;
+    const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
+
+    if (password === "anui2025") {
+      isOwner = true;
+    }
 
     const galleryEl = document.getElementById('gallery');
-    images.forEach(img => {
-      const el = document.createElement('div');
-      el.className = 'gallery-item';
-      el.innerHTML = `
-        <img src="${img.src}" alt="${img.title}">
-        <h4>${img.title}</h4>
-        <p>${img.desc}</p>
+    const imageInput = document.getElementById('imageInput');
+    const ownerControls = document.getElementById('ownerControls');
+    const avatar = document.getElementById('avatar');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarUpload = document.getElementById('avatarUpload');
+
+    if (isOwner) {
+      ownerControls.style.display = 'block';
+      avatarUpload.style.display = 'block';
+    }
+
+    let imageCount = 0;
+
+    function addImageToGallery(src, title = "", desc = "") {
+      imageCount++;
+      const container = document.createElement('div');
+      container.className = 'gallery-item';
+      if (isOwner) container.classList.add('owner');
+
+      container.innerHTML = `
+        <img src="${src}" alt="${title}">
+        <h4>Ảnh ${imageCount}</h4>
+        <p>${desc || "Tải từ máy người dùng"}</p>
+        ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
       `;
-      galleryEl.appendChild(el);
+
+      if (isOwner) {
+        container.querySelector('.delete-btn').addEventListener('click', () => {
+          galleryEl.removeChild(container);
+        });
+      }
+
+      container.querySelector('img').addEventListener('click', () => {
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        container.classList.add('active');
+      });
+
+      galleryEl.appendChild(container);
+    }
+
+    imageInput?.addEventListener('change', (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          addImageToGallery(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    avatarInput?.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          avatar.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     });
   </script>
 </body>
 </html>
+
