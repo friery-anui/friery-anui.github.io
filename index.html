@@ -16,14 +16,13 @@
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
     </div>
-    
-    <!-- Nút chỉnh sửa -->
+
+    <button id="loginButton">Đăng nhập quản trị</button>
     <button id="editButton" class="no-access">Chỉnh sửa</button>
 
-    <!-- Phần chỉnh sửa avatar -->
-    <div class="edit-section" id="editSection" style="display: none;">
-      <label for="avatarInput">Chọn ảnh đại diện mới:</label>
-      <input type="file" id="avatarInput" accept="image/*">
+    <div class="edit-section" id="editSection">
+      <label for="newAvatar">Chọn ảnh đại diện mới:</label>
+      <input type="file" id="newAvatar" accept="image/*">
       <button onclick="changeAvatar()">Lưu ảnh</button>
       <button onclick="removeAvatar()">Xóa ảnh</button>
     </div>
@@ -45,36 +44,57 @@
   </div>
 
   <script>
-    let isOwner = false;
-    const password = prompt("Nếu bạn là người quản lý, vui lòng nhập mật khẩu:");
-
-    if (password === "anui2025") {
-      isOwner = true;
-    }
-
+    let isOwner = localStorage.getItem('isOwner') === 'true';
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
     const ownerControls = document.getElementById('ownerControls');
     const avatar = document.getElementById('avatar');
-    const avatarInput = document.getElementById('avatarInput');
+    const loginButton = document.getElementById('loginButton');
     const editButton = document.getElementById('editButton');
     const editSection = document.getElementById('editSection');
+    const newAvatarInput = document.getElementById('newAvatar');
 
-    if (isOwner) {
-      ownerControls.style.display = 'block';
-      editButton.classList.remove('no-access');
-
-      editButton.addEventListener('click', () => {
-        editSection.style.display = editSection.style.display === 'none' ? 'block' : 'none';
-      });
+    function updateOwnerUI() {
+      if (isOwner) {
+        ownerControls.style.display = 'block';
+        editButton.style.display = 'inline-block';
+        loginButton.textContent = 'Đăng xuất';
+      } else {
+        ownerControls.style.display = 'none';
+        editButton.style.display = 'none';
+        editSection.style.display = 'none';
+        loginButton.textContent = 'Đăng nhập quản trị';
+      }
     }
 
+    loginButton.addEventListener('click', () => {
+      if (isOwner) {
+        isOwner = false;
+        localStorage.setItem('isOwner', 'false');
+        updateOwnerUI();
+      } else {
+        const password = prompt('Nhập mật khẩu quản trị:');
+        if (password === 'anui2025') {
+          isOwner = true;
+          localStorage.setItem('isOwner', 'true');
+          updateOwnerUI();
+        } else {
+          alert('Sai mật khẩu!');
+        }
+      }
+    });
+
+    editButton.addEventListener('click', () => {
+      editSection.style.display = editSection.style.display === 'block' ? 'none' : 'block';
+    });
+
     function changeAvatar() {
-      const file = avatarInput.files[0];
+      const file = newAvatarInput.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function(e) {
           avatar.src = e.target.result;
+          localStorage.setItem('avatarSrc', e.target.result);
         };
         reader.readAsDataURL(file);
       }
@@ -82,7 +102,15 @@
 
     function removeAvatar() {
       avatar.src = 'content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp';
+      localStorage.removeItem('avatarSrc');
     }
+
+    const savedAvatar = localStorage.getItem('avatarSrc');
+    if (savedAvatar) {
+      avatar.src = savedAvatar;
+    }
+
+    updateOwnerUI();
 
     let imageCount = 0;
 
@@ -101,7 +129,8 @@
 
       if (isOwner) {
         container.querySelector('.delete-btn').addEventListener('click', () => {
-          galleryEl.removeChild(container);
+          container.remove();
+          saveGalleryToStorage();
         });
       }
 
@@ -121,10 +150,28 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           addImageToGallery(e.target.result);
+          saveGalleryToStorage();
         };
         reader.readAsDataURL(file);
       });
     });
+
+    function saveGalleryToStorage() {
+      const images = [];
+      document.querySelectorAll('.gallery-item img').forEach(img => {
+        images.push(img.src);
+      });
+      localStorage.setItem('galleryImages', JSON.stringify(images));
+    }
+
+    function loadGalleryFromStorage() {
+      const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
+      images.forEach(src => {
+        addImageToGallery(src);
+      });
+    }
+
+    loadGalleryFromStorage();
   </script>
 </body>
 </html>
