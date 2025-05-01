@@ -3,25 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hồ sơ cá nhân - Friery Anui</title>
+  <title>Hồ sơ cá nhân - friery-anui</title>
   <link rel="stylesheet" href="main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <!-- Thông tin cá nhân -->
+    <!-- Hồ sơ cá nhân -->
     <div class="profile">
+      <!-- Nhấn vào avatar sẽ hiển thị nút đăng nhập -->
       <img class="avatar" id="avatar" src="content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp" alt="Avatar" />
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
-      <p><strong>Ngày sinh:</strong> 10/06/2005</p>
-      <p><strong>Nghề nghiệp:</strong> freelancer</p>
     </div>
 
-    <!-- Chỉnh sửa giao diện cá nhân -->
+    <!-- Nút đăng nhập hoặc đăng xuất (ẩn mặc định) -->
     <button id="loginButton">Đăng nhập quản trị</button>
+
+    <!-- Nút chỉnh sửa chỉ hiện khi là quản trị viên -->
     <button id="editButton" class="no-access">Chỉnh sửa</button>
 
+    <!-- Khu vực chỉnh sửa avatar -->
     <div class="edit-section" id="editSection">
       <label for="newAvatar">Chọn ảnh đại diện mới:</label>
       <input type="file" id="newAvatar" accept="image/*">
@@ -40,6 +44,7 @@
     <!-- Bộ sưu tập ảnh -->
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
+      <!-- Chỉ hiện khi là admin -->
       <div id="ownerControls" style="display: none;">
         <input type="file" id="imageInput" multiple accept="image/*" />
       </div>
@@ -48,8 +53,10 @@
   </div>
 
   <script>
-    let isOwner = localStorage.getItem('isOwner') === 'true';
+    // === QUẢN LÝ TRẠNG THÁI ADMIN ===
+    let isOwner = localStorage.getItem('isOwner') === 'true'; // Lưu trạng thái qua localStorage
     let imageCount = 0;
+
     const galleryEl = document.getElementById('gallery');
     const imageInput = document.getElementById('imageInput');
     const ownerControls = document.getElementById('ownerControls');
@@ -59,6 +66,7 @@
     const editSection = document.getElementById('editSection');
     const newAvatarInput = document.getElementById('newAvatar');
 
+    // Cập nhật giao diện theo quyền quản trị
     function updateOwnerUI() {
       if (isOwner) {
         ownerControls.style.display = 'block';
@@ -74,6 +82,7 @@
       }
     }
 
+    // Đăng nhập / đăng xuất
     loginButton.addEventListener('click', () => {
       if (isOwner) {
         isOwner = false;
@@ -91,6 +100,7 @@
       }
     });
 
+    // Nhấn vào avatar để hiển thị nút đăng nhập
     avatar.addEventListener('click', () => {
       if (!isOwner) {
         loginButton.classList.toggle('visible');
@@ -98,10 +108,12 @@
       }
     });
 
+    // Mở / đóng khu vực chỉnh sửa
     editButton.addEventListener('click', () => {
       editSection.style.display = editSection.style.display === 'block' ? 'none' : 'block';
     });
 
+    // Đổi ảnh đại diện
     function changeAvatar() {
       const file = newAvatarInput.files[0];
       if (file) {
@@ -114,14 +126,17 @@
       }
     }
 
+    // Xóa ảnh đại diện
     function removeAvatar() {
       avatar.src = 'content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp';
       localStorage.removeItem('avatarSrc');
     }
 
+    // Load ảnh đại diện nếu đã lưu trước đó
     const savedAvatar = localStorage.getItem('avatarSrc');
     if (savedAvatar) avatar.src = savedAvatar;
 
+    // Thêm ảnh mới vào gallery
     function addImageToGallery(src, title = "", desc = "") {
       imageCount++;
       const container = document.createElement('div');
@@ -134,6 +149,7 @@
         ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
       `;
 
+      // Gắn chức năng xoá nếu là admin
       if (isOwner) {
         const btn = container.querySelector('.delete-btn');
         btn.addEventListener('click', () => {
@@ -146,6 +162,7 @@
       galleryEl.appendChild(container);
     }
 
+    // Khi chọn ảnh tải lên
     imageInput?.addEventListener('change', (event) => {
       Array.from(event.target.files).forEach(file => {
         const reader = new FileReader();
@@ -157,6 +174,7 @@
       });
     });
 
+    // Lưu danh sách ảnh gallery vào localStorage
     function saveGalleryToStorage() {
       const images = [];
       document.querySelectorAll('.gallery-item').forEach(item => {
@@ -166,14 +184,15 @@
       localStorage.setItem('galleryImages', JSON.stringify(images));
     }
 
+    // Load ảnh từ localStorage khi tải lại
     function loadGalleryFromStorage() {
       const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
       imageCount = 0;
       images.forEach(({ src, isAdmin }) => addImageToGallery(src, '', '', isAdmin));
     }
 
-    updateOwnerUI();
-    loadGalleryFromStorage();
+    updateOwnerUI(); // Áp dụng trạng thái admin khi tải trang
+    loadGalleryFromStorage(); // Tải ảnh gallery từ bộ nhớ
   </script>
 </body>
 </html>
