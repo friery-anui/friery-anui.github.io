@@ -12,16 +12,46 @@
 <body>
   <div class="container">
     <div class="profile">
-      <img class="avatar" src="https://preview.redd.it/clothing-klukai-v0-lm7x6x5084xd1.png?width=500&format=png&auto=webp&s=a28a77b3a2b4ac4b0fdb4b950462df5a9c081a67" alt="Avatar">
-      <h1>Friery Anui</h1>
-      <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
-    </div>
-    <div class="social-links">
-      <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a>
-      <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a>
-      <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
-      <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
+      <!-- Ảnh đại diện duy nhất -->
+      <img class="avatar" id="avatar" src="content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp" alt="Avatar" />
+      
+      <h1 id="name">Friery Anui</h1>
+      <input type="text" id="nameInput" style="display: none;" value="Friery Anui" />
+      <p id="bio">Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
+      <textarea id="bioInput" style="display: none;">Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</textarea>
+      <button id="editBtn">Chỉnh sửa</button>
+      <button id="saveBtn" style="display: none;">Lưu</button>
     </div>
   </div>
+
+  <script>
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const avatar = document.getElementById('avatar');
+    const name = document.getElementById('name');
+    const nameInput = document.getElementById('nameInput');
+    const bio = document.getElementById('bio');
+    const bioInput = document.getElementById('bioInput');
+
+    editBtn.addEventListener('click', () => {
+      name.style.display = 'none';
+      nameInput.style.display = 'block';
+      bio.style.display = 'none';
+      bioInput.style.display = 'block';
+      editBtn.style.display = 'none';
+      saveBtn.style.display = 'inline-block';
+    });
+
+    saveBtn.addEventListener('click', () => {
+      name.textContent = nameInput.value;
+      bio.textContent = bioInput.value;
+      name.style.display = 'block';
+      nameInput.style.display = 'none';
+      bio.style.display = 'block';
+      bioInput.style.display = 'none';
+      saveBtn.style.display = 'none';
+      editBtn.style.display = 'inline-block';
+    });
+  </script>
 </body>
 </html>
