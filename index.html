@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hồ sơ cá nhân - friery-anui</title>
   <link rel="stylesheet" href="main.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,12 +16,47 @@
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
     </div>
+
     <div class="social-links">
       <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a>
       <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a>
       <a href="https://www.instagram.com/nhandoan106/" target="_blank">Instagram</a>
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
+
+    <div class="gallery-section">
+      <h2>Bộ sưu tập ảnh</h2>
+      <div id="gallery" class="gallery-grid">
+        <!-- Hình ảnh sẽ được chèn tự động tại đây bằng JavaScript -->
+      </div>
+    </div>
   </div>
+
+  <script>
+    const images = [
+      {
+        title: "Ảnh 1",
+        src: "images/uploads/anh1.jpg",
+        desc: "Mô tả ảnh 1"
+      },
+      {
+        title: "Ảnh 2",
+        src: "images/uploads/anh2.jpg",
+        desc: "Mô tả ảnh 2"
+      }
+    ];
+
+    const galleryEl = document.getElementById('gallery');
+    images.forEach(img => {
+      const el = document.createElement('div');
+      el.className = 'gallery-item';
+      el.innerHTML = `
+        <img src="${img.src}" alt="${img.title}">
+        <h4>${img.title}</h4>
+        <p>${img.desc}</p>
+      `;
+      galleryEl.appendChild(el);
+    });
+  </script>
 </body>
 </html>
