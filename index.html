@@ -141,19 +141,18 @@
     if (savedAvatar) avatar.src = savedAvatar;
 
     // Thêm ảnh mới vào gallery
-    function addImageToGallery(src, title = "", desc = "") {
+    function addImageToGallery(src, title = "", desc = "", isAdmin = false) {
       imageCount++;
       const container = document.createElement('div');
       container.className = 'gallery-item';
-      if (isOwner) container.classList.add('admin-added');
+      if (isOwner || isAdmin) container.classList.add('admin-added'); // <- quan trọng
       container.innerHTML = `
         <img src="${src}" alt="${title}">
         <h4>Ảnh ${imageCount}</h4>
         <p>${desc || "Tải từ máy người dùng"}</p>
-        ${isOwner ? '<button class="delete-btn">Xoá</button>' : ''}
+        ${(isOwner || isAdmin) ? '<button class="delete-btn">Xoá</button>' : ''}
       `;
-
-      // Gắn chức năng xoá nếu là admin
+    
       if (isOwner) {
         const btn = container.querySelector('.delete-btn');
         btn.addEventListener('click', () => {
@@ -162,7 +161,7 @@
         });
         btn.classList.add('show');
       }
-
+    
       galleryEl.appendChild(container);
     }
 
