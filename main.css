@@ -42,6 +42,26 @@ body {
   margin-top: 8px;
 }
 
+/* Nút thay avatar */
+#changeAvatarButton {
+  display: none; /* Ẩn nút thay avatar khi chưa đăng nhập */
+  background-color: #ff6600;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+#changeAvatarButton:hover {
+  background-color: #e65c00;
+}
+
+#changeAvatarButton.hidden {
+  display: none; /* Đảm bảo nút bị ẩn khi chưa đăng nhập */
+}
+
 /* Nút đăng nhập */
 #loginButton {
   display: none;
