@@ -14,12 +14,13 @@
       <img class="avatar" id="avatar" src="content/gallery/clothing-klukai-v0-lm7x6x5084xd1.webp" alt="Avatar" />
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
+      <button id="changeAvatarButton" class="hidden">Thay avatar</button> <!-- Nút thay avatar -->
     </div>
 
     <!-- Nút đăng nhập -->
     <button id="loginButton">Đăng nhập quản trị</button>
 
-    <!-- Bộ sưu tập ảnh -->
+    <!-- Phần thêm ảnh chỉ hiển thị khi đăng nhập -->
     <div class="gallery-section">
       <h2>Bộ sưu tập ảnh</h2>
       
@@ -46,22 +47,28 @@
     const galleryEl = document.getElementById('gallery');
     const avatar = document.getElementById('avatar');
     const loginButton = document.getElementById('loginButton');
+    const changeAvatarButton = document.getElementById('changeAvatarButton');
     const addImageSection = document.getElementById('addImageSection');
     const imageInput = document.getElementById('imageInput');
     const imageDesc = document.getElementById('imageDesc');
+    const newAvatarInput = document.createElement('input'); // Tạo input file cho avatar
 
+    // Cập nhật giao diện khi đăng nhập
     function updateOwnerUI() {
       if (isOwner) {
         loginButton.textContent = 'Đăng xuất';
         loginButton.classList.add('visible');
         addImageSection.style.display = 'block'; // Hiển thị phần thêm ảnh khi đăng nhập
+        changeAvatarButton.classList.remove('hidden'); // Hiển thị nút thay avatar khi đăng nhập
       } else {
         loginButton.textContent = 'Đăng nhập quản trị';
         loginButton.classList.remove('visible');
         addImageSection.style.display = 'none'; // Ẩn phần thêm ảnh khi chưa đăng nhập
+        changeAvatarButton.classList.add('hidden'); // Ẩn nút thay avatar khi chưa đăng nhập
       }
     }
 
+    // Xử lý đăng nhập / đăng xuất
     loginButton.addEventListener('click', () => {
       if (isOwner) {
         isOwner = false;
@@ -86,6 +93,30 @@
         avatar.classList.toggle('active');
       }
     });
+
+    // Thay đổi avatar khi click nút "Thay avatar"
+    changeAvatarButton.addEventListener('click', () => {
+      newAvatarInput.type = 'file';
+      newAvatarInput.accept = 'image/*';
+      newAvatarInput.click(); // Mở cửa sổ chọn file
+    });
+
+    // Xử lý khi người dùng chọn avatar mới
+    newAvatarInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          avatar.src = event.target.result;
+          localStorage.setItem('avatarSrc', event.target.result); // Lưu avatar vào localStorage
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Hiển thị avatar đã lưu nếu có
+    const savedAvatar = localStorage.getItem('avatarSrc');
+    if (savedAvatar) avatar.src = savedAvatar;
 
     // Hàm thêm ảnh vào bộ sưu tập
     function addImageToGallery(src, desc) {
