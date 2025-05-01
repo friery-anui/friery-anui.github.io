@@ -60,23 +60,13 @@
         ownerControls.style.display = 'block';
         editButton.style.display = 'inline-block';
         loginButton.textContent = 'Đăng xuất';
-        loginButton.style.visibility = 'visible';
-        document.querySelectorAll('.gallery-item').forEach(item => {
-          if (!item.classList.contains('admin-added')) {
-            item.querySelector('.delete-btn')?.style.display = 'none';  
-          } else {
-            item.querySelector('.delete-btn')?.style.display = 'inline-block'; 
-          }
-        });
+        loginButton.classList.add('visible');
       } else {
         ownerControls.style.display = 'none';
         editButton.style.display = 'none';
         editSection.style.display = 'none';
         loginButton.textContent = 'Đăng nhập quản trị';
-        loginButton.style.visibility = 'hidden';
-        document.querySelectorAll('.gallery-item .delete-btn').forEach(btn => {
-          btn.style.display = 'none';  
-        });
+        loginButton.classList.remove('visible');
       }
     }
 
@@ -94,6 +84,14 @@
         } else {
           alert('Sai mật khẩu!');
         }
+      }
+    });
+
+    // Hiển thị/ẩn loginButton khi click avatar nếu chưa là owner
+    avatar.addEventListener('click', () => {
+      if (!isOwner) {
+        loginButton.classList.toggle('visible');
+        avatar.classList.toggle('active');
       }
     });
 
@@ -119,15 +117,7 @@
     }
 
     const savedAvatar = localStorage.getItem('avatarSrc');
-    if (savedAvatar) {
-      avatar.src = savedAvatar;
-    }
-
-    avatar.addEventListener('click', () => {
-      if (!isOwner) {
-        loginButton.style.display = 'inline-block'; // Hiển thị nút đăng nhập khi avatar được nhấn
-      }
-    });
+    if (savedAvatar) avatar.src = savedAvatar;
 
     function addImageToGallery(src, title = "", desc = "") {
       imageCount++;
@@ -142,20 +132,21 @@
       `;
 
       if (isOwner) {
-        container.querySelector('.delete-btn').addEventListener('click', () => {
+        const btn = container.querySelector('.delete-btn');
+        btn.addEventListener('click', () => {
           container.remove();
           saveGalleryToStorage();
         });
+        btn.classList.add('show');
       }
 
       galleryEl.appendChild(container);
     }
 
     imageInput?.addEventListener('change', (event) => {
-      const files = event.target.files;
-      Array.from(files).forEach((file) => {
+      Array.from(event.target.files).forEach(file => {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = e => {
           addImageToGallery(e.target.result);
           saveGalleryToStorage();
         };
@@ -167,18 +158,15 @@
       const images = [];
       document.querySelectorAll('.gallery-item').forEach(item => {
         const img = item.querySelector('img');
-        const isAdmin = item.classList.contains('admin-added');
-        images.push({ src: img.src, isAdmin });
+        images.push({ src: img.src, isAdmin: item.classList.contains('admin-added') });
       });
       localStorage.setItem('galleryImages', JSON.stringify(images));
     }
 
     function loadGalleryFromStorage() {
-      const images = JSON.parse(localStorage.getItem('galleryImages') || "[]");
+      const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
       imageCount = 0;
-      images.forEach(({ src, isAdmin }) => {
-        addImageToGallery(src, "", "", isAdmin);
-      });
+      images.forEach(({ src, isAdmin }) => addImageToGallery(src, '', '', isAdmin));
     }
 
     updateOwnerUI();
