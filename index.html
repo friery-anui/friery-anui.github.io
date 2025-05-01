@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
@@ -16,6 +16,18 @@
       <h1>Friery Anui</h1>
       <p>Xin chào! Tôi là một người yêu công nghệ và sáng tạo nội dung.</p>
     </div>
+    
+    <!-- Edit button to toggle edit mode (only visible for admin) -->
+    <button id="editButton" class="no-access">Chỉnh sửa</button>
+
+    <!-- Editable section (hidden initially) -->
+    <div class="edit-section" id="editSection">
+      <label for="newAvatar">Chọn ảnh đại diện mới:</label>
+      <input type="file" id="newAvatar" accept="image/*">
+      <button onclick="changeAvatar()">Lưu ảnh</button>
+      <button onclick="removeAvatar()">Xóa ảnh</button>
+    </div>
+
     <div class="social-links">
       <a href="https://www.facebook.com/nhan.12070068" target="_blank">Facebook</a>
       <a href="https://www.youtube.com/@friedrich-re/featured" target="_blank">YouTube</a>
@@ -23,6 +35,56 @@
       <a href="https://www.tiktok.com/@h.misery" target="_blank">TikTok</a>
     </div>
   </div>
+
+  <script>
+    // Assuming that you have a way to determine if the user is an admin
+    let isAdmin = true; // Set to true or false based on user role
+
+    // Show the edit button only for admin users
+    if (isAdmin) {
+      document.getElementById('editButton').classList.remove('no-access');
+    }
+
+    // Toggle the visibility of the edit section
+    document.getElementById('editButton').addEventListener('click', function() {
+      const editSection = document.getElementById('editSection');
+      if (editSection.style.display === 'none') {
+        editSection.style.display = 'block';
+        this.innerText = 'Hủy chỉnh sửa';
+      } else {
+        editSection.style.display = 'none';
+        this.innerText = 'Chỉnh sửa';
+      }
+    });
+
+    // Change the avatar image (only for admin)
+    function changeAvatar() {
+      if (!isAdmin) {
+        alert('Bạn không có quyền thay đổi ảnh.');
+        return;
+      }
+      const fileInput = document.getElementById('newAvatar');
+      const avatar = document.getElementById('avatar');
+
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          avatar.src = e.target.result; // Update the avatar image source
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Remove the avatar image (only for admin)
+    function removeAvatar() {
+      if (!isAdmin) {
+        alert('Bạn không có quyền xóa ảnh.');
+        return;
+      }
+      const avatar = document.getElementById('avatar');
+      avatar.src = ''; // Remove the avatar image source
+    }
+  </script>
 </body>
 </html>
-
